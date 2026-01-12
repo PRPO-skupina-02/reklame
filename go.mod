@@ -3,7 +3,7 @@ module github.com/PRPO-skupina-02/reklame
 go 1.25.5
 
 require (
-	github.com/PRPO-skupina-02/common v0.4.1
+	github.com/PRPO-skupina-02/common v0.5.0
 	github.com/gin-gonic/gin v1.11.0
 	github.com/go-co-op/gocron/v2 v2.19.0
 	github.com/go-openapi/errors v0.22.6

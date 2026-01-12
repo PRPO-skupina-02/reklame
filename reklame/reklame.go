@@ -22,25 +22,24 @@ func RefreshAdvertisements(sporedClient *client.Spored, store *AdvertisementStor
 		return
 	}
 
-	tomorrow, dayAfter := getTimeRange()
+	tomorrow := getTomorrow()
 
 	for _, theater := range theatersResp.Payload.Data {
-		fetchTheaterRooms(sporedClient, store, theater.ID, tomorrow, dayAfter)
+		fetchTheaterRooms(sporedClient, store, theater.ID, tomorrow)
 	}
 
 	slog.Info("Advertisements successfully refreshed")
 }
 
-func getTimeRange() (time.Time, time.Time) {
+func getTomorrow() time.Time {
 	now := time.Now()
 
 	tomorrow := now.Add(24 * time.Hour).Truncate(24 * time.Hour)
-	dayAfterTomorrow := tomorrow.Add(24 * time.Hour)
 
-	return tomorrow, dayAfterTomorrow
+	return tomorrow
 }
 
-func fetchTheaterRooms(sporedClient *client.Spored, store *AdvertisementStore, theaterID string, tomorrow, dayAfter time.Time) {
+func fetchTheaterRooms(sporedClient *client.Spored, store *AdvertisementStore, theaterID string, tomorrow time.Time) {
 	theaterUUID := strfmt.UUID(theaterID)
 	params := rooms.NewRoomsListParams().WithTheaterID(theaterUUID)
 
@@ -53,7 +52,7 @@ func fetchTheaterRooms(sporedClient *client.Spored, store *AdvertisementStore, t
 	moviesMap := map[string]*MovieWithTimeslots{}
 
 	for _, room := range roomsResp.Payload.Data {
-		fetchRoomTimeslots(sporedClient, moviesMap, theaterUUID, room.ID, tomorrow, dayAfter)
+		fetchRoomTimeslots(sporedClient, moviesMap, theaterUUID, room.ID, tomorrow)
 	}
 
 	advertisements := []MovieWithTimeslots{}
@@ -61,13 +60,16 @@ func fetchTheaterRooms(sporedClient *client.Spored, store *AdvertisementStore, t
 		advertisements = append(advertisements, *movie)
 	}
 
+	slog.Debug("Advertisements collected", "theaterID", theaterID, "advertisements", advertisements)
 	store.SetAdvertisements(theaterID, advertisements)
 }
 
-func fetchRoomTimeslots(sporedClient *client.Spored, moviesMap map[string]*MovieWithTimeslots, theaterID strfmt.UUID, roomID string, tomorrow, dayAfter time.Time) {
+func fetchRoomTimeslots(sporedClient *client.Spored, moviesMap map[string]*MovieWithTimeslots, theaterID strfmt.UUID, roomID string, tomorrow time.Time) {
 	roomUUID := strfmt.UUID(roomID)
 
-	params := timeslots.NewTimeSlotsListParams().WithTheaterID(theaterID).WithRoomID(roomUUID)
+	date := strfmt.Date(tomorrow)
+
+	params := timeslots.NewTimeSlotsListParams().WithTheaterID(theaterID).WithRoomID(roomUUID).WithDate(&date)
 
 	timeslotsResp, err := sporedClient.Timeslots.TimeSlotsList(params)
 	if err != nil {
@@ -76,21 +78,11 @@ func fetchRoomTimeslots(sporedClient *client.Spored, moviesMap map[string]*Movie
 	}
 
 	for _, timeslot := range timeslotsResp.Payload.Data {
-		fetchTimeSlotMovie(sporedClient, moviesMap, timeslot, tomorrow, dayAfter)
+		fetchTimeSlotMovie(sporedClient, moviesMap, timeslot, tomorrow)
 	}
 }
 
-func fetchTimeSlotMovie(sporedClient *client.Spored, moviesMap map[string]*MovieWithTimeslots, timeslot *models.APITimeSlotResponse, tomorrow, dayAfter time.Time) {
-	startTime, err := time.Parse(time.RFC3339, timeslot.StartTime)
-	if err != nil {
-		slog.Warn("Failed to parse timeslot start time", "timeslot_id", timeslot.ID, "err", err)
-		return
-	}
-
-	if !startTime.After(tomorrow) || !startTime.Before(dayAfter) {
-		return
-	}
-
+func fetchTimeSlotMovie(sporedClient *client.Spored, moviesMap map[string]*MovieWithTimeslots, timeslot *models.APITimeSlotResponse, tomorrow time.Time) {
 	movieID := timeslot.MovieID
 
 	params := movies.NewMoviesShowParams().WithMovieID(strfmt.UUID(movieID))
