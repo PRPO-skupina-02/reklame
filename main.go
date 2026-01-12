@@ -9,9 +9,10 @@ import (
 	"github.com/PRPO-skupina-02/common/logging"
 	"github.com/PRPO-skupina-02/common/validation"
 	"github.com/PRPO-skupina-02/reklame/api"
+	"github.com/PRPO-skupina-02/reklame/clients/spored/client"
+	"github.com/PRPO-skupina-02/reklame/reklame"
 	"github.com/gin-gonic/gin"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-swagger/go-swagger/examples/stream-client/client"
 )
 
 func main() {
@@ -38,11 +39,18 @@ func run() error {
 	transportConfig := client.DefaultTransportConfig().WithHost(sporedHost)
 	sporedClient := client.NewHTTPClientWithConfig(strfmt.Default, transportConfig)
 
+	store := reklame.NewAdvertisementStore()
+
+	err = reklame.SetupCron(sporedClient, store)
+	if err != nil {
+		return err
+	}
+
 	router := gin.Default()
-	api.Register(router, trans)
+	api.Register(router, trans, store)
 
 	slog.Info("Server startup complete")
-	err = router.Run(":8081")
+	err = router.Run(":8082")
 	if err != nil {
 		return err
 	}

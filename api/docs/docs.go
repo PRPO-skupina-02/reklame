@@ -14,16 +14,173 @@ const docTemplate = `{
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
-    "paths": {}
+    "paths": {
+        "/advertisements/{theaterID}": {
+            "get": {
+                "description": "Get a list of movies and their showing times for tomorrow for a specific theater",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "advertisements"
+                ],
+                "summary": "Get advertisements",
+                "operationId": "GetAdvertisements",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "Theater ID",
+                        "name": "theaterID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/reklame.MovieWithTimeslots"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/middleware.HttpError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/middleware.HttpError"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "middleware.HttpError": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "fields": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.APIMovieResponse": {
+            "type": "object",
+            "properties": {
+                "active": {
+                    "description": "active",
+                    "type": "boolean"
+                },
+                "created_at": {
+                    "description": "created at",
+                    "type": "string"
+                },
+                "description": {
+                    "description": "description",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "image_url": {
+                    "description": "image url",
+                    "type": "string"
+                },
+                "length_minutes": {
+                    "description": "length minutes",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                },
+                "rating": {
+                    "description": "rating",
+                    "type": "number"
+                },
+                "updated_at": {
+                    "description": "updated at",
+                    "type": "string"
+                }
+            }
+        },
+        "models.APITimeSlotResponse": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "description": "created at",
+                    "type": "string"
+                },
+                "end_time": {
+                    "description": "end time",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "movie_id": {
+                    "description": "movie id",
+                    "type": "string"
+                },
+                "room_id": {
+                    "description": "room id",
+                    "type": "string"
+                },
+                "start_time": {
+                    "description": "start time",
+                    "type": "string"
+                },
+                "updated_at": {
+                    "description": "updated at",
+                    "type": "string"
+                }
+            }
+        },
+        "reklame.MovieWithTimeslots": {
+            "type": "object",
+            "properties": {
+                "movie": {
+                    "$ref": "#/definitions/models.APIMovieResponse"
+                },
+                "timeslots": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.APITimeSlotResponse"
+                    }
+                }
+            }
+        }
+    }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:8081",
+	Host:             "localhost:8082",
 	BasePath:         "/api/v1/reklame",
 	Schemes:          []string{},
-	Title:            "Nakup API",
+	Title:            "Reklame API",
 	Description:      "API za upravljanje z kinodvoranami in njihovim sporedom",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,

@@ -1,9 +1,118 @@
 basePath: /api/v1/reklame
-host: localhost:8081
+definitions:
+  middleware.HttpError:
+    properties:
+      code:
+        type: integer
+      fields:
+        additionalProperties:
+          type: string
+        type: object
+      message:
+        type: string
+    type: object
+  models.APIMovieResponse:
+    properties:
+      active:
+        description: active
+        type: boolean
+      created_at:
+        description: created at
+        type: string
+      description:
+        description: description
+        type: string
+      id:
+        description: id
+        type: string
+      image_url:
+        description: image url
+        type: string
+      length_minutes:
+        description: length minutes
+        type: integer
+      name:
+        description: name
+        type: string
+      rating:
+        description: rating
+        type: number
+      updated_at:
+        description: updated at
+        type: string
+    type: object
+  models.APITimeSlotResponse:
+    properties:
+      created_at:
+        description: created at
+        type: string
+      end_time:
+        description: end time
+        type: string
+      id:
+        description: id
+        type: string
+      movie_id:
+        description: movie id
+        type: string
+      room_id:
+        description: room id
+        type: string
+      start_time:
+        description: start time
+        type: string
+      updated_at:
+        description: updated at
+        type: string
+    type: object
+  reklame.MovieWithTimeslots:
+    properties:
+      movie:
+        $ref: '#/definitions/models.APIMovieResponse'
+      timeslots:
+        items:
+          $ref: '#/definitions/models.APITimeSlotResponse'
+        type: array
+    type: object
+host: localhost:8082
 info:
   contact: {}
   description: API za upravljanje z kinodvoranami in njihovim sporedom
-  title: Nakup API
+  title: Reklame API
   version: "1.0"
-paths: {}
+paths:
+  /advertisements/{theaterID}:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of movies and their showing times for tomorrow for a
+        specific theater
+      operationId: GetAdvertisements
+      parameters:
+      - description: Theater ID
+        format: uuid
+        in: path
+        name: theaterID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/reklame.MovieWithTimeslots'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/middleware.HttpError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/middleware.HttpError'
+      summary: Get advertisements
+      tags:
+      - advertisements
 swagger: "2.0"
