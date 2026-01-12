@@ -9,11 +9,10 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestingRouter(t *testing.T) *gin.Engine {
+func TestingRouter(t *testing.T, store *reklame.AdvertisementStore) *gin.Engine {
 	router := gin.Default()
 	trans, err := validation.RegisterValidation()
 	require.NoError(t, err)
-	store := reklame.NewAdvertisementStore()
 	Register(router, trans, store)
 
 	return router
