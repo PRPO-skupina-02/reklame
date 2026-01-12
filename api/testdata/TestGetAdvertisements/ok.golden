@@ -1,0 +1,49 @@
+[
+	{
+		"movie": {
+			"active": true,
+			"description": "Test Description",
+			"id": "aa1234567-0123-0123-0123-0123456789ab",
+			"image_url": "https://example.com/image.jpg",
+			"length_minutes": 120,
+			"name": "Test Movie",
+			"rating": 8.5
+		},
+		"timeslots": [
+			{
+				"end_time": "2026-01-13T20:00:00Z",
+				"id": "bb1234567-0123-0123-0123-0123456789ab",
+				"movie_id": "aa1234567-0123-0123-0123-0123456789ab",
+				"room_id": "cc1234567-0123-0123-0123-0123456789ab",
+				"start_time": "2026-01-13T18:00:00Z"
+			},
+			{
+				"end_time": "2026-01-13T22:30:00Z",
+				"id": "dd1234567-0123-0123-0123-0123456789ab",
+				"movie_id": "aa1234567-0123-0123-0123-0123456789ab",
+				"room_id": "ee1234567-0123-0123-0123-0123456789ab",
+				"start_time": "2026-01-13T20:30:00Z"
+			}
+		]
+	},
+	{
+		"movie": {
+			"active": true,
+			"description": "Another Description",
+			"id": "ff1234567-0123-0123-0123-0123456789ab",
+			"image_url": "https://example.com/image2.jpg",
+			"length_minutes": 100,
+			"name": "Another Movie",
+			"rating": 7.5
+		},
+		"timeslots": [
+			{
+				"end_time": "2026-01-13T20:40:00Z",
+				"id": "gg1234567-0123-0123-0123-0123456789ab",
+				"movie_id": "ff1234567-0123-0123-0123-0123456789ab",
+				"room_id": "hh1234567-0123-0123-0123-0123456789ab",
+				"start_time": "2026-01-13T19:00:00Z"
+			}
+		]
+	}
+]
