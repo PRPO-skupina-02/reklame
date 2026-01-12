@@ -20,6 +20,6 @@ WORKDIR /app
 
 COPY --from=build /reklame /app/reklame
 
-EXPOSE 8083
+EXPOSE 8080
 
 ENTRYPOINT [ "/app/reklame" ]
