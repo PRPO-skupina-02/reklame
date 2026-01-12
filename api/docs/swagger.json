@@ -6,7 +6,7 @@
         "contact": {},
         "version": "1.0"
     },
-    "host": "localhost:8082",
+    "host": "localhost:8083",
     "basePath": "/api/v1/reklame",
     "paths": {
         "/advertisements/{theaterID}": {

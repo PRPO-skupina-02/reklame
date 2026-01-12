@@ -50,7 +50,7 @@ func run() error {
 	api.Register(router, trans, store)
 
 	slog.Info("Server startup complete")
-	err = router.Run(":8083")
+	err = router.Run(":8080")
 	if err != nil {
 		return err
 	}

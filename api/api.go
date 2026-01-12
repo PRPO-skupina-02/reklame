@@ -16,7 +16,7 @@ import (
 //	@version		1.0
 //	@description	API za upravljanje z kinodvoranami in njihovim sporedom
 
-//	@host		localhost:8082
+//	@host		localhost:8083
 //	@BasePath	/api/v1/reklame
 
 func Register(router *gin.Engine, trans ut.Translator, store *reklame.AdvertisementStore) {
