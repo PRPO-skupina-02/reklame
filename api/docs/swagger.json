@@ -1,0 +1,12 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API za upravljanje z kinodvoranami in njihovim sporedom",
+        "title": "Nakup API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8081",
+    "basePath": "/api/v1/reklame",
+    "paths": {}
+}

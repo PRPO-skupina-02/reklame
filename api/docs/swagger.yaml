@@ -1,0 +1,9 @@
+basePath: /api/v1/reklame
+host: localhost:8081
+info:
+  contact: {}
+  description: API za upravljanje z kinodvoranami in njihovim sporedom
+  title: Nakup API
+  version: "1.0"
+paths: {}
+swagger: "2.0"
