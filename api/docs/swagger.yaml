@@ -74,7 +74,7 @@ definitions:
           $ref: '#/definitions/models.APITimeSlotResponse'
         type: array
     type: object
-host: localhost:8082
+host: localhost:8083
 info:
   contact: {}
   description: API za upravljanje z kinodvoranami in njihovim sporedom
