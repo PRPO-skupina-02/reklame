@@ -1,15 +1,15 @@
 services:
   nakup:
     ports:
-      - "8082:8082"
+      - "8083:8083"
     restart: always
     build: .
     environment:
       - LOG_LEVEL=DEBUG
       - TZ=
-      - SPORED_HOST=localhost:8080
+      - SPORED_HOST=192.168.1.62:8080
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8082/healthcheck"]
+      test: ["CMD", "curl", "-f", "http://localhost:8083/healthcheck"]
       interval: 3s
       timeout: 10s
       retries: 5
