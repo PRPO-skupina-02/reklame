@@ -78,11 +78,11 @@ func fetchRoomTimeslots(sporedClient *client.Spored, moviesMap map[string]*Movie
 	}
 
 	for _, timeslot := range timeslotsResp.Payload.Data {
-		fetchTimeSlotMovie(sporedClient, moviesMap, timeslot, tomorrow)
+		fetchTimeSlotMovie(sporedClient, moviesMap, timeslot)
 	}
 }
 
-func fetchTimeSlotMovie(sporedClient *client.Spored, moviesMap map[string]*MovieWithTimeslots, timeslot *models.APITimeSlotResponse, tomorrow time.Time) {
+func fetchTimeSlotMovie(sporedClient *client.Spored, moviesMap map[string]*MovieWithTimeslots, timeslot *models.APITimeSlotResponse) {
 	movieID := timeslot.MovieID
 
 	params := movies.NewMoviesShowParams().WithMovieID(strfmt.UUID(movieID))
