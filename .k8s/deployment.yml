@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reklame
+  namespace: production
+  labels:
+    app: reklame
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: reklame
+  template:
+    metadata:
+      labels:
+        app: reklame
+    spec:
+      serviceAccountName: reklame-sa
+      containers:
+      - name: reklame
+        image: ghcr.io/prpo-skupina-02/reklame:latest
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: reklame-config
+              key: LOG_LEVEL
+        - name: TZ
+          value: "Europe/Ljubljana"
+        - name: SPORED_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: reklame-config
+              key: SPORED_HOST
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /healthcheck
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /healthcheck
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
