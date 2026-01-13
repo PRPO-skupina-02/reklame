@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: reklame-config
+  namespace: production
+data:
+  LOG_LEVEL: "INFO"
+  SPORED_HOST: "http://spored:8080"
