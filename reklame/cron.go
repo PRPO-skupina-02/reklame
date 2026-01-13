@@ -2,6 +2,7 @@ package reklame
 
 import (
 	"log/slog"
+	"time"
 
 	"github.com/PRPO-skupina-02/reklame/clients/spored/client"
 	"github.com/go-co-op/gocron/v2"
@@ -15,7 +16,7 @@ func SetupCron(sporedClient *client.Spored, store *AdvertisementStore) error {
 
 	// Fetch on startup
 	_, err = s.NewJob(
-		gocron.OneTimeJob(gocron.OneTimeJobStartImmediately()),
+		gocron.OneTimeJob(gocron.OneTimeJobStartDateTime(time.Now().Add(time.Second*10))),
 		gocron.NewTask(RefreshAdvertisements, sporedClient, store),
 	)
 	if err != nil {
