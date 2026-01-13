@@ -14,14 +14,5 @@ install-cli-tools:
 	go install github.com/swaggo/swag/cmd/swag@latest
 	go install github.com/go-swagger/go-swagger/cmd/swagger@latest
 
-migrate:
-	migrate -database postgres://postgres:postgres@localhost:5442/nakup?sslmode=disable -path db/migrations up
-
-migrate-down: 
-	migrate -database postgres://postgres:postgres@localhost:5442/nakup?sslmode=disable -path db/migrations down
-
-fixtures:
-	godotenv go run ../common/tools/loadfixture/loadfixture.go db/fixtures/
-
 swagger-clients:
 	swagger generate client -f ../spored/api/docs/swagger.json -A spored -t ./clients/spored
