@@ -4,15 +4,14 @@ metadata:
   name: reklame
   namespace: production
   annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
     kubernetes.io/ingress.class: "gce"
 spec:
   tls:
   - hosts:
-    - reklame.prpo.timhrovat.com
+    - reklame.cinecore.timhrovat.com
     secretName: reklame-tls
   rules:
-  - host: reklame.prpo.timhrovat.com
+  - host: reklame.cinecore.timhrovat.com
     http:
       paths:
       - path: /
