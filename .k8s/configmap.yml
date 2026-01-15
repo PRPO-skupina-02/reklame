@@ -5,4 +5,4 @@ metadata:
   namespace: production
 data:
   LOG_LEVEL: "INFO"
-  SPORED_HOST: "http://spored:8080"
+  SPORED_HOST: "spored:8080"
